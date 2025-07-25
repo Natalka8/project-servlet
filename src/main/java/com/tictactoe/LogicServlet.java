@@ -19,38 +19,38 @@ public class LogicServlet extends HttpServlet {
             Field field = extractField(currentSession);
             int index = getSelectedIndex(req);
 
-            // 1. Проверка валидности хода
+            // 1. Checking the validity of the move
             if (!isValidMove(field, index)) {
                 redirectToIndex(req, resp);
                 return;
             }
 
-            // 2. Ход игрока (крестик)
+            // 2. Player's move (cross)
             field.getField().put(index, Sign.CROSS);
 
-            // 3. Проверка победы крестика
+            // 3. Checking the victory of the cross
             if (checkWinAndRedirect(currentSession, field, resp)) {
                 return;
             }
 
-            // 4. Проверка ничьей
+            // 4.  Checking the draw
             if (isDraw(field)) {
                 handleDraw(currentSession, field, resp);
                 return;
             }
 
-            // 5. Ход компьютера (нолик)
+            // 5. Computer stroke (zero)
             int emptyIndex = field.getEmptyFieldIndex();
             if (emptyIndex >= 0) {
                 field.getField().put(emptyIndex, Sign.NOUGHT);
 
-                // 6. Проверка победы нолика
+                // 6. Checking the Zero's victory
                 if (checkWinAndRedirect(currentSession, field, resp)) {
                     return;
                 }
             }
 
-            // 7. Обновление состояния игры
+            // 7. Updating the game status
             updateGameState(currentSession, field);
             redirectToIndex(req, resp);
 
@@ -59,7 +59,7 @@ public class LogicServlet extends HttpServlet {
         }
     }
 
-    // Основные игровые методы
+    // Basic gaming techniques
     private boolean isValidMove(Field field, int index) {
         return index >= 0 && index < 9 && field.getField().get(index) == Sign.EMPTY;
     }
@@ -80,7 +80,7 @@ public class LogicServlet extends HttpServlet {
         return field.getEmptyFieldIndex() == -1;
     }
 
-    // Обработка состояний игры
+    // Game State processing
     private void handleDraw(HttpSession session, Field field,
                             HttpServletResponse resp) throws IOException {
         session.setAttribute("draw", true);
@@ -93,7 +93,7 @@ public class LogicServlet extends HttpServlet {
         session.setAttribute("field", field);
     }
 
-    // Вспомогательные методы
+    // Auxiliary methods
     private void redirectToIndex(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }

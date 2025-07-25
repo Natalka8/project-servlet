@@ -14,18 +14,18 @@ public class RestartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // Безопасная инвалидация сессии
+        // Secure session disability
         HttpSession session = req.getSession(false);
         if (session != null) {
             try {
                 session.invalidate();
             } catch (IllegalStateException e) {
-                // Сессия уже была недействительна - продолжаем
+                // The session was already invalid - we continue
                 System.out.println("Session already invalidated");
             }
         }
 
-        // Всегда перенаправляем на стартовую страницу
+        // We always redirect you to the start page.
         resp.sendRedirect(req.getContextPath() + "/tic-tac-toe/start");
     }
 }

@@ -14,22 +14,22 @@ import java.util.Map;
 public class InitServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Создание новой сессии
+        // Creating a new session
         HttpSession currentSession = req.getSession(true);
 
-        // Создание игрового поля
+        // Creating a playing field
         Field field = new Field();
         Map<Integer, Sign> fieldData = field.getField();
 
-        // Получение списка значений поля
+        // Getting a list of field values
         List<Sign> data = field.getFieldData();
 
-        // Добавление в сессию параметров поля (нужно будет для хранения состояния между запросами)
+        // Adding field parameters to the session (it will be necessary to store the state between requests)
         currentSession.setAttribute("field", field);
-        // и значений поля, отсортированных по индексу (нужно для отрисовки крестиков и ноликов)
+        // and field values sorted by index (needed for drawing tic-tac-toe)
         currentSession.setAttribute("data", data);
 
-        // Перенаправление запроса на страницу index.jsp через сервер
+        // Redirecting the request to the index page.jsp via the server
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 }
